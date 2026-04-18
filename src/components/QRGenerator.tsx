@@ -143,7 +143,7 @@ const QRGenerator: React.FC = () => {
               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
             />
             <label htmlFor="specialFormat" className="text-sm font-medium cursor-pointer">
-              特定格式解析 (提取 '----' 分隔的前两段为底部文字，第三段及以后为二维码内容)
+              特定格式解析 (提取 '----' 或 '空格' 分隔的前两段为底部文字，第三段及以后为二维码内容)
             </label>
           </div>
 

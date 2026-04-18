@@ -12,13 +12,17 @@ export interface QRCodeOptions {
   index?: number; // 增加序号选项
 }
 
-// 解析特殊格式：通过多个破折号进行分割，提取前两段为底部文字，第三段及之后为二维码实际内容
+// 解析特殊格式：支持通过多个破折号或空格/制表符进行分割
+// 提取前两段为底部文字，第三段及之后完整保留为二维码实际内容
 export const parseSpecialFormat = (text: string): { label: string; qrContent: string } | null => {
-  const parts = text.split(/-{3,}/);
-  if (parts.length >= 3) {
+  // 使用正则表达式匹配前两个不包含空白字符和破折号的段落
+  // 分隔符可以是连续的破折号（至少3个）或者任意个空白字符（空格、制表符等）
+  const match = text.trim().match(/^(\S+?)(?:-{3,}|\s+)(\S+?)(?:-{3,}|\s+)([\s\S]+)$/);
+  
+  if (match) {
     return {
-      label: `${parts[0].trim()} ${parts[1].trim()}`,
-      qrContent: parts.slice(2).join('----').trim()
+      label: `${match[1].trim()} ${match[2].trim()}`,
+      qrContent: match[3].trim()
     };
   }
   return null;
