@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Download, Trash2, Copy, Plus, Grid3X3, FileArchive } from 'lucide-react';
 import { useQRStore } from '../stores/qrStore';
 import { generateQRCode, generateBatchQRCodes, downloadQRCode } from '../utils/qrGenerator';
@@ -7,11 +7,23 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
 const QRGenerator: React.FC = () => {
-  const [inputText, setInputText] = useState('');
-  const [batchInput, setBatchInput] = useState('');
-  const [isBatchMode, setIsBatchMode] = useState(false);
-  const [useSpecialFormat, setUseSpecialFormat] = useState(false);
-  const { qrCodes, isGenerating, addQRCode, addBatchQRCodes, removeQRCode, clearAllQRCodes, setIsGenerating } = useQRStore();
+  const { 
+    qrCodes, 
+    isGenerating, 
+    addQRCode, 
+    addBatchQRCodes, 
+    removeQRCode, 
+    clearAllQRCodes, 
+    setIsGenerating,
+    inputText,
+    batchInput,
+    isBatchMode,
+    useSpecialFormat,
+    setInputText,
+    setBatchInput,
+    setIsBatchMode,
+    setUseSpecialFormat
+  } = useQRStore();
 
   const handleGenerateSingle = async () => {
     if (!inputText.trim()) {
@@ -23,7 +35,7 @@ const QRGenerator: React.FC = () => {
       setIsGenerating(true);
       const { dataUrl, label } = await generateQRCode(inputText.trim(), { useSpecialFormat });
       addQRCode(inputText.trim(), dataUrl, label);
-      setInputText('');
+      // 不再清空输入框，保留输入内容
       toast.success('二维码生成成功！');
     } catch (error) {
       toast.error('生成二维码失败，请重试');
@@ -57,7 +69,7 @@ const QRGenerator: React.FC = () => {
         label: results[index].label,
       }));
       addBatchQRCodes(items);
-      setBatchInput('');
+      // 不再清空输入框，保留输入内容
       toast.success(`成功生成 ${texts.length} 个二维码！`);
     } catch (error) {
       toast.error('批量生成二维码失败，请重试');
